@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -182,6 +182,7 @@ WX_EXPORT_METHOD(@selector(pickTime:callback:))
     [[[UIApplication sharedApplication] keyWindow] endEditing:YES];  //hide keyboard
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     [window addSubview:self.backgroundView];
+   
     if (self.isAnimating) {
         return;
     }
@@ -197,7 +198,6 @@ WX_EXPORT_METHOD(@selector(pickTime:callback:))
     [UIView animateWithDuration:0.35f animations:^{
         self.pickerView.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - WXPickerHeight, [UIScreen mainScreen].bounds.size.width, WXPickerHeight);
         self.backgroundView.alpha = 1;
-        
     } completion:^(BOOL finished) {
         self.isAnimating = NO;
         
@@ -430,6 +430,11 @@ WX_EXPORT_METHOD(@selector(pickTime:callback:))
 {
     self.callback = callback;
     self.datePicker = [[UIDatePicker alloc]init];
+#ifdef __IPHONE_13_4
+    if (@available(iOS 13.4, *)) {
+        self.datePicker.preferredDatePickerStyle = UIDatePickerStyleWheels;
+    }
+#endif
     if (UIDatePickerModeDate == self.datePickerMode) {
         self.datePicker.datePickerMode = UIDatePickerModeDate;
         NSString *value = [WXConvert NSString:options[@"value"]];
