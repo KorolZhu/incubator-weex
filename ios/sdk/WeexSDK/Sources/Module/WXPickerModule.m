@@ -468,6 +468,22 @@ WX_EXPORT_METHOD(@selector(pickTime:callback:))
             }
         }
     }
+    // 取消,确认, 以及Tab 背景色
+    if (options[@"cancelTitleColor"]) {
+        self.cancelTitleColor = [WXConvert UIColor:options[@"cancelTitleColor"]];
+    } else {
+        self.cancelTitleColor = [UIColor colorWithRed:74/ 255.0 green:74/255.0 blue:74/255.0 alpha:1];
+    }
+    if (options[@"confirmTitleColor"]) {
+        self.confirmTitleColor = [WXConvert UIColor:options[@"confirmTitleColor"]];
+    } else {
+        self.confirmTitleColor = [UIColor colorWithRed:74/ 255.0 green:74/255.0 blue:74/255.0 alpha:1];
+    }
+    if (options[@"titleBackgroundColor"]) {
+        self.titleBackgroundColor = [WXConvert UIColor:options[@"titleBackgroundColor"]];
+    } else {
+        self.titleBackgroundColor = [UIColor whiteColor];
+    }
     [self configDatePickerView];
     [self show];
 }
@@ -483,11 +499,20 @@ WX_EXPORT_METHOD(@selector(pickTime:callback:))
     self.pickerView = [self createPickerView];
     UIToolbar *toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, WXPickerToolBarHeight)];
     [toolBar setBackgroundColor:[UIColor whiteColor]];
+    if (self.titleBackgroundColor) {
+        [toolBar setBackgroundColor:self.titleBackgroundColor];
+    }
     UIBarButtonItem* noSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     noSpace.width=10;
     UIBarButtonItem* doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneDatePicker:)];
+    if (self.confirmTitleColor) {
+        doneBtn.tintColor = self.confirmTitleColor;
+    }
     UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIBarButtonItem* cancelBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelDatePicker:)];
+    if (self.confirmTitleColor) {
+        cancelBtn.tintColor = self.cancelTitleColor;
+    }
     [toolBar setItems:[NSArray arrayWithObjects:noSpace,cancelBtn,flexSpace,doneBtn,noSpace, nil]];
     [self.pickerView addSubview:toolBar];
     CGRect pickerFrame = CGRectMake(0, WXPickerToolBarHeight, [UIScreen mainScreen].bounds.size.width, WXPickerHeight-WXPickerToolBarHeight);
