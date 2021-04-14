@@ -461,10 +461,12 @@ WX_EXPORT_METHOD(@selector(pickTime:callback:))
     } else if (UIDatePickerModeTime == self.datePickerMode) {
         self.datePicker.datePickerMode = UIDatePickerModeTime;
         NSString *value = [WXConvert NSString:options[@"value"]];
+        NSInteger interval_time = [WXConvert NSString:options[@"interval_time"]].integerValue;
         if (value) {
             NSDate *date = [WXUtility timeStringToDate:value];
             if (date) {
                 self.datePicker.date = date;
+                self.datePicker.minuteInterval = interval_time;
             }
         }
     }
